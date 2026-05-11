@@ -1,0 +1,29 @@
+{
+  "name": "nutrient-data-extraction-cookbook",
+  "version": "0.1.0",
+  "description": "Runnable examples and concept guides for Nutrient DWS data extraction.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "extract:text": "tsx examples/01-extract-text.ts",
+    "extract:structured-text": "tsx examples/02-extract-structured-text.ts",
+    "extract:tables": "tsx examples/03-extract-tables.ts",
+    "extract:keyvalues": "tsx examples/04-extract-key-values.ts",
+    "extract:xlsx": "tsx examples/05-extract-tables-to-xlsx.ts",
+    "extract:all": "tsx examples/06-extract-all.ts",
+    "recipe:invoice": "tsx examples/07-recipe-invoice-to-record.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "undici": "^6.19.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3"
+  }
+}
