@@ -89,6 +89,8 @@ export interface Table {
 }
 
 export interface StructuredText {
+  /** OCR confidence for the page as a whole (0–100). */
+  confidence?: number;
   characters: { bbox: BBox; value: string }[];
   lines: {
     bbox: BBox;
@@ -101,6 +103,8 @@ export interface StructuredText {
   words: {
     bbox: BBox;
     characterCount: number;
+    /** Per-word OCR confidence (0–100). */
+    confidence?: number;
     firstCharacterIndex: number;
     isFromDictionary: boolean;
     value: string;
@@ -108,7 +112,13 @@ export interface StructuredText {
 }
 
 export interface ExtractionPage {
-  pageIndex: number;
+  /**
+   * Page index is NOT returned by DWS — pages are implicitly ordered by their
+   * position in the `pages` array. Kept optional in the type for forward
+   * compatibility; use the array index when you need it.
+   */
+  pageIndex?: number;
+  /** Plain text is returned with every response, regardless of which flag was set. */
   plainText?: string;
   structuredText?: StructuredText;
   keyValuePairs?: KeyValuePair[];

@@ -12,7 +12,7 @@ Quick definitions of the terms you'll see in this guide and in API responses.
 
 **Credit** — the unit DWS bills in. Free tier is 200 credits/month. Different capabilities consume different amounts (text = 1, KVPs = 3).
 
-**Data type** — for key-value pairs, a classification of the value (Currency, DateTime, EmailAddress, IBAN, Number, Percentage, PhoneNumber, String, UID, URL).
+**Data type** — for key-value pairs, a classification of the value (Currency, DateTime, EmailAddress, IBAN, Number, Percentage, PhoneNumber, PostalAddress, String, UID, URL).
 
 **Document Engine** — Nutrient's self-hostable version of DWS. Same API contract, different deployment.
 

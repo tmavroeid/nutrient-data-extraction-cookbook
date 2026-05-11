@@ -29,9 +29,9 @@ async function main(): Promise<void> {
   const result = await extract(pdf, { keyValuePairs: true });
 
   let total = 0;
-  for (const page of result.pages) {
+  for (const [i, page] of result.pages.entries()) {
     if (!page.keyValuePairs?.length) continue;
-    console.log(`Page ${page.pageIndex + 1}`);
+    console.log(`Page ${i + 1}`);
     console.log(
       "Key".padEnd(28) +
         "Value".padEnd(36) +

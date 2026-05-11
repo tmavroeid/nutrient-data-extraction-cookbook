@@ -63,15 +63,15 @@ You don't need to install anything to follow the docs. If you want to *see* extr
 nutrient-data-extraction-cookbook/
 ├── README.md                              ← you are here
 ├── docs/                                  ← non-developer concept guide
-├── examples/                              ← runnable TypeScript examples
+├── examples/                              ← runnable TypeScript + walkthroughs
 │   ├── lib/client.ts                      ← shared DWS client
-│   ├── 01-extract-text.ts                 ← plain text  → lease agreement
-│   ├── 02-extract-structured-text.ts      ← text + bboxes → loan application
-│   ├── 03-extract-tables.ts               ← tables → bank statement
-│   ├── 04-extract-key-values.ts           ← KVPs → tax invoice
-│   ├── 05-extract-tables-to-xlsx.ts       ← tables → Excel → bank statement
-│   ├── 06-extract-all.ts                  ← everything → tax invoice
-│   └── 07-recipe-invoice-to-record.ts     ← real-world pattern: PDF → record
+│   ├── 01-extract-text.ts / .md           ← plain text → lease agreement
+│   ├── 02-extract-structured-text.ts / .md ← text + bboxes → loan application
+│   ├── 03-extract-tables.ts / .md         ← tables → bank statement
+│   ├── 04-extract-key-values.ts / .md     ← KVPs → tax invoice
+│   ├── 05-extract-tables-to-xlsx.ts / .md ← tables → Excel → bank statement
+│   ├── 06-extract-all.ts / .md            ← everything → tax invoice
+│   └── 07-recipe-invoice-to-record.ts /.md ← real-world pattern: PDF → record
 ├── samples/                               ← 5 ready-to-use PDFs
 │   ├── tax-invoice.pdf
 │   ├── bank-statement.pdf
@@ -81,17 +81,21 @@ nutrient-data-extraction-cookbook/
 └── output/                                ← results land here (gitignored)
 ```
 
+Each example has a sibling `.md` walkthrough showing the input PDF, the relevant code snippet, the terminal output, and the saved JSON shape annotated — read those for the fastest "what does this actually do" answer.
+
 ## Which capability does what?
 
 All five capabilities are served by the same endpoint: `POST https://api.nutrient.io/build`. You toggle them in the `output` block of the `instructions` JSON.
 
-| Capability | Best for | API flag |
-| --- | --- | --- |
-| **Plain text** | Search indexing, full‑text snapshots, LLM input | `output.plainText: true` |
-| **Structured text** | Layout‑aware processing, knowing *where* a word sits | `output.structuredText: true` |
-| **Tables → JSON** | Programmatic access to rows, columns, headers | `output.tables: true` |
-| **Tables → XLSX** | "Give me this PDF as a spreadsheet" — one round trip | `output.type: "xlsx"` |
-| **Key‑value pairs** | Forms, invoices, receipts — pulls out labelled fields | `output.keyValuePairs: true` |
+| Capability | Best for | API flag | Walkthrough |
+| --- | --- | --- | --- |
+| **Plain text** | Search indexing, full‑text snapshots, LLM input | `output.plainText: true` | [`01-extract-text.md`](./examples/01-extract-text.md) |
+| **Structured text** | Layout‑aware processing, knowing *where* a word sits | `output.structuredText: true` | [`02-extract-structured-text.md`](./examples/02-extract-structured-text.md) |
+| **Tables → JSON** | Programmatic access to rows, columns, headers | `output.tables: true` | [`03-extract-tables.md`](./examples/03-extract-tables.md) |
+| **Key‑value pairs** | Forms, invoices, receipts — pulls out labelled fields | `output.keyValuePairs: true` | [`04-extract-key-values.md`](./examples/04-extract-key-values.md) |
+| **Tables → XLSX** | "Give me this PDF as a spreadsheet" — one round trip | `output.type: "xlsx"` | [`05-extract-tables-to-xlsx.md`](./examples/05-extract-tables-to-xlsx.md) |
+| **All-in-one** | One call, everything | All four flags | [`06-extract-all.md`](./examples/06-extract-all.md) |
+| **Recipe: PDF → record** | Real-world invoice pipeline pattern | KVPs + tables, then shape | [`07-recipe-invoice-to-record.md`](./examples/07-recipe-invoice-to-record.md) |
 
 See [`docs/02-when-to-use-which-tool.md`](./docs/02-when-to-use-which-tool.md) for help choosing.
 

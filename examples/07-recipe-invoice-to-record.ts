@@ -51,6 +51,22 @@ function normalizeKey(rawKey: string): string {
     .replace(/^_+|_+$/g, "");
 }
 
+/**
+ * The KVP engine sometimes uses one data value as a "label" for another
+ * (e.g. it sees two adjacent dates and pairs them as key→value). Filter
+ * these out: if the rawKey looks like a date, currency, or pure number,
+ * it's not a real header field.
+ */
+function keyLooksLikeData(rawKey: string): boolean {
+  const trimmed = rawKey.trim();
+  if (!trimmed) return true;
+  // Date-ish patterns: 01/02/2024, 31-Mar-2024, 2024-12-31, etc.
+  if (/^\d{1,4}[\/\-.]\w+[\/\-.]\d{1,4}$/.test(trimmed)) return true;
+  // Pure number / currency
+  if (/^[-+]?[\d.,]+\s*[€$£%]?$/.test(trimmed)) return true;
+  return false;
+}
+
 /** Pull header fields out of the KVP array. */
 function collectHeader(
   pages: ExtractionResult["pages"],
@@ -60,6 +76,20 @@ function collectHeader(
 
   for (const page of pages) {
     for (const kvp of page.keyValuePairs ?? []) {
+      // DWS sometimes returns "headerless" pairs: the engine found a value
+      // it recognised (e.g. a PostalAddress) but couldn't pair it with a
+      // label. These come back with key.content === "#" and a zero-area
+      // bbox. Skip them — they don't belong in a normalised header map.
+      const isHeaderless =
+        kvp.key.content === "#" &&
+        kvp.key.bbox.width === 0 &&
+        kvp.key.bbox.height === 0;
+      if (isHeaderless) continue;
+
+      // Reject pairs where the "key" is actually data (a date, currency,
+      // or number) — the engine sometimes pairs adjacent values together.
+      if (keyLooksLikeData(kvp.key.content)) continue;
+
       const key = normalizeKey(kvp.key.content);
       if (!key) continue;
       const entry = {
@@ -116,7 +146,16 @@ async function main(): Promise<void> {
   });
 
   const { header, review } = collectHeader(raw.pages);
-  const lineItems = raw.pages.flatMap((p) => (p.tables ?? []).flatMap(tableToRows));
+
+  // Some DWS table detections come back empty or with only headers and no
+  // data cells. Drop those before flattening so we don't pollute lineItems
+  // with `{}` rows.
+  const usefulTables = raw.pages
+    .flatMap((p) => p.tables ?? [])
+    .filter((t) => t.cells.some((c) => !c.isHeader && c.text.trim() !== ""));
+  const lineItems = usefulTables
+    .flatMap(tableToRows)
+    .filter((row) => Object.values(row).some((v) => v !== ""));
 
   const record: InvoiceRecord = {
     source: pdf,

@@ -52,12 +52,12 @@ async function main(): Promise<void> {
   const result = await extract(pdf, { tables: true });
 
   let tableCount = 0;
-  for (const page of result.pages) {
+  for (const [i, page] of result.pages.entries()) {
     if (!page.tables?.length) continue;
     for (const table of page.tables) {
       tableCount += 1;
       console.log(
-        `Page ${page.pageIndex + 1} — table ${tableCount} ` +
+        `Page ${i + 1} — table ${tableCount} ` +
           `(confidence ${table.confidence.toFixed(1)}%, ${table.rows.length} rows × ${table.columns.length} cols)`,
       );
       console.log(previewTable(table));

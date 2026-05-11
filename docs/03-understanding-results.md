@@ -45,6 +45,7 @@ Every key-value pair value is tagged with a `dataType`. The current set includes
 | `URL` | `https://example.com` | |
 | `IBAN` | `AT13 2060 4236 6111 5994` | Pre-validated against the IBAN format. |
 | `UID` | `P00201` | Generic unique-identifier-shaped strings. |
+| `PostalAddress` | `Mount Sinai School of Medicine\nOne Gustave L. Levy Place\nNew York, NY 10029-6574` | Multi-line addresses. The value comes back as a single string with `\r\n` separators between lines. |
 
 Use `dataType` to pick a parser. If a value is tagged `Currency`, you can safely run it through a money-parsing library; if it's `DateTime`, run it through your date library.
 

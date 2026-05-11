@@ -22,11 +22,12 @@ async function main(): Promise<void> {
 
   const result = await extract(pdf, { structuredText: true });
 
-  for (const page of result.pages) {
+  for (const [i, page] of result.pages.entries()) {
     const st = page.structuredText;
     if (!st) continue;
+    const conf = st.confidence !== undefined ? `, OCR confidence ${st.confidence.toFixed(1)}%` : "";
     console.log(
-      `Page ${page.pageIndex + 1}: ${st.paragraphs.length} paragraphs, ${st.lines.length} lines, ${st.words.length} words`,
+      `Page ${i + 1}: ${st.paragraphs.length} paragraphs, ${st.lines.length} lines, ${st.words.length} words${conf}`,
     );
     const sampleWord = st.words[0];
     if (sampleWord) {

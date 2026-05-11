@@ -26,12 +26,12 @@ async function main(): Promise<void> {
     tables: true,
   });
 
-  for (const page of result.pages) {
+  for (const [i, page] of result.pages.entries()) {
     const wordCount = page.structuredText?.words.length ?? 0;
     const kvpCount = page.keyValuePairs?.length ?? 0;
     const tableCount = page.tables?.length ?? 0;
     console.log(
-      `Page ${page.pageIndex + 1}: ${wordCount} words, ${kvpCount} key-value pairs, ${tableCount} tables`,
+      `Page ${i + 1}: ${wordCount} words, ${kvpCount} key-value pairs, ${tableCount} tables`,
     );
   }
 

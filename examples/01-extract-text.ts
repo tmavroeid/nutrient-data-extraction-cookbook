@@ -22,9 +22,9 @@ async function main(): Promise<void> {
   const result = await extract(pdf, { plainText: true });
 
   // Print a short preview per page.
-  for (const page of result.pages) {
+  for (const [i, page] of result.pages.entries()) {
     const preview = (page.plainText ?? "").slice(0, 200).replace(/\n/g, " ");
-    console.log(`Page ${page.pageIndex + 1}: ${preview}${preview.length === 200 ? "…" : ""}`);
+    console.log(`Page ${i + 1}: ${preview}${preview.length === 200 ? "…" : ""}`);
   }
 
   const path = await saveJson("01-text.json", result);

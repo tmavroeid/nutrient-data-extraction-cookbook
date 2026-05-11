@@ -40,6 +40,19 @@ A few things to try:
 
 A network blip. Retry. If it keeps happening, check <https://status.nutrient.io> (or contact support).
 
+## "408 The request timed out"
+
+The server-side processing exceeded the per-call timeout. Most commonly seen on **large multi-page PDFs** (think 4 MB+ or many dozens of pages), or when several heavy extractors are enabled simultaneously on a complex document.
+
+The error includes a `requestId` you can quote to DWS support.
+
+Mitigations:
+
+- Try a smaller PDF first to confirm the rest of your setup works.
+- Split the PDF into page ranges and process each piece in its own `/build` call (use `pdftk`, `qpdf`, or DWS's own document-split action).
+- Drop heavier extractors. If `extract:all` times out, run `extract:text` and `extract:keyvalues` separately.
+- For genuinely huge documents, consider self-hosted Document Engine — it has no per-call timeout you don't control.
+
 ## OCR is slow
 
 OCR is the most compute-intensive operation. Tips:
